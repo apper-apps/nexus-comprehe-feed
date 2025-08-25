@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import ApperIcon from "@/components/ApperIcon";
 import UserSection from "@/components/molecules/UserSection";
-
 const Sidebar = ({ isOpen, onClose }) => {
 const navigation = [
     { name: "Contacts", href: "/contacts", icon: "Users" },
