@@ -1,6 +1,8 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import ApperIcon from "@/components/ApperIcon";
+import UserSection from "@/components/molecules/UserSection";
 
 const Sidebar = ({ isOpen, onClose }) => {
 const navigation = [
@@ -51,21 +53,10 @@ const navigation = [
             ))}
           </nav>
 
-          {/* Footer */}
-          <div className="px-6 py-4 border-t border-gray-200">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-gradient-to-r from-accent-400 to-accent-500 rounded-full flex items-center justify-center">
-                <ApperIcon name="User" className="h-4 w-4 text-white" />
-              </div>
-              <div className="ml-3">
-                <p className="text-sm font-medium text-gray-900">Sales Team</p>
-                <p className="text-xs text-gray-500">Administrator</p>
-              </div>
-            </div>
-          </div>
+{/* Footer */}
+          <UserSection />
         </div>
       </div>
-
       {/* Mobile Sidebar Overlay */}
       {isOpen && (
         <div className="lg:hidden">
@@ -120,18 +111,8 @@ const navigation = [
                 ))}
               </nav>
 
-              {/* Footer */}
-              <div className="px-6 py-4 border-t border-gray-200">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 bg-gradient-to-r from-accent-400 to-accent-500 rounded-full flex items-center justify-center">
-                    <ApperIcon name="User" className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="ml-3">
-                    <p className="text-sm font-medium text-gray-900">Sales Team</p>
-                    <p className="text-xs text-gray-500">Administrator</p>
-                  </div>
-                </div>
-              </div>
+{/* Footer */}
+              <UserSection />
             </div>
           </div>
         </div>

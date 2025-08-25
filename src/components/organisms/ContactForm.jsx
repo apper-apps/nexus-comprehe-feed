@@ -10,13 +10,13 @@ import { useCustomProperties } from "@/contexts/CustomPropertyContext";
 const ContactForm = ({ contact, companies = [], onSave, onClose }) => {
 const { contactProperties } = useCustomProperties();
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    companyId: "",
-    lifecycleStage: "Lead",
-    notes: ""
+    first_name_c: "",
+    last_name_c: "",
+    email_c: "",
+    phone_c: "",
+    company_id_c: "",
+    lifecycle_stage_c: "Lead",
+    notes_c: ""
   });
   const [customPropertyValues, setCustomPropertyValues] = useState({});
 
@@ -24,17 +24,17 @@ const { contactProperties } = useCustomProperties();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
 useEffect(() => {
-    if (contact) {
+if (contact) {
       setFormData({
-        firstName: contact.firstName || "",
-        lastName: contact.lastName || "",
-        email: contact.email || "",
-        phone: contact.phone || "",
-        companyId: contact.companyId || "",
-        lifecycleStage: contact.lifecycleStage || "Lead",
-        notes: contact.notes || ""
+        first_name_c: contact.first_name_c || "",
+        last_name_c: contact.last_name_c || "",
+        email_c: contact.email_c || "",
+        phone_c: contact.phone_c || "",
+        company_id_c: contact.company_id_c || "",
+        lifecycle_stage_c: contact.lifecycle_stage_c || "Lead",
+        notes_c: contact.notes_c || ""
       });
-      setCustomPropertyValues(contact.customProperties || {});
+      setCustomPropertyValues(JSON.parse(contact.custom_properties_c || "{}"));
     }
   }, [contact]);
 
@@ -89,9 +89,10 @@ const handleSubmit = async (e) => {
     setIsSubmitting(true);
 
     try {
-      const contactData = {
+const contactData = {
         ...formData,
-        customProperties: customPropertyValues
+        custom_properties_c: customPropertyValues,
+        Name: `${formData.first_name_c} ${formData.last_name_c}`
       };
       await onSave(contactData);
       toast.success(contact ? "Contact updated successfully!" : "Contact created successfully!");
@@ -223,9 +224,9 @@ const handleChange = (e) => {
                   error={errors.companyId}
                 >
                   <option value="">Select a company</option>
-                  {companies.map((company) => (
+{companies.map((company) => (
                     <option key={company.Id} value={company.Id}>
-                      {company.name}
+                      {company.Name}
                     </option>
                   ))}
                 </Select>

@@ -1,15 +1,37 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useSelector } from "react-redux";
+import { AuthContext } from "../../App";
 import ApperIcon from "@/components/ApperIcon";
 import SearchBar from "@/components/molecules/SearchBar";
+import Button from "@/components/atoms/Button";
 
-const Header = ({ 
-  title, 
-  searchValue = "", 
+const Header = ({
+  title,
+  searchValue,
   onSearchChange,
   onMobileMenuToggle,
   showSearch = true,
   children 
 }) => {
+  const { logout } = useContext(AuthContext);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
+
+  const LogoutButton = () => {
+    if (!isAuthenticated) return null;
+    
+    return (
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={logout}
+        className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+      >
+        <ApperIcon name="LogOut" className="h-4 w-4" />
+        <span className="hidden sm:inline">Logout</span>
+      </Button>
+    );
+  };
+
   return (
     <header className="bg-white border-b border-gray-200 shadow-soft sticky top-0 z-30">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -43,7 +65,7 @@ const Header = ({
 
           {/* Right Section */}
           <div className="flex items-center space-x-4">
-            {children}
+{children}
             
             {/* Notifications */}
             <button className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-200 relative">
@@ -55,6 +77,9 @@ const Header = ({
             <button className="p-2 rounded-lg text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors duration-200">
               <ApperIcon name="Settings" className="h-6 w-6" />
             </button>
+
+            {/* Logout Button */}
+            <LogoutButton />
           </div>
         </div>
 

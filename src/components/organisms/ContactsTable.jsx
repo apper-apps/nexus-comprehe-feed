@@ -20,8 +20,8 @@ const ContactsTable = ({
   showBulkActions = false
 }) => {
   const getCompanyName = (companyId) => {
-    const company = companies.find(c => c.Id === companyId);
-    return company ? company.name : "No Company";
+const company = companies.find(c => c.Id === companyId);
+    return company ? company.Name : "No Company";
   };
 
   const handleSort = (field) => {
@@ -69,29 +69,29 @@ const ContactsTable = ({
               </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
-                onClick={() => handleSort("firstName")}
+onClick={() => handleSort("first_name_c")}
               >
                 <div className="flex items-center space-x-1">
                   <span>Name</span>
-                  <ApperIcon name={getSortIcon("firstName")} className="h-4 w-4" />
+                  <ApperIcon name={getSortIcon("first_name_c")} className="h-4 w-4" />
                 </div>
               </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
-                onClick={() => handleSort("companyId")}
+onClick={() => handleSort("company_id_c")}
               >
                 <div className="flex items-center space-x-1">
                   <span>Company</span>
-                  <ApperIcon name={getSortIcon("companyId")} className="h-4 w-4" />
+                  <ApperIcon name={getSortIcon("company_id_c")} className="h-4 w-4" />
                 </div>
               </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
-                onClick={() => handleSort("email")}
+onClick={() => handleSort("email_c")}
               >
                 <div className="flex items-center space-x-1">
                   <span>Email</span>
-                  <ApperIcon name={getSortIcon("email")} className="h-4 w-4" />
+                  <ApperIcon name={getSortIcon("email_c")} className="h-4 w-4" />
                 </div>
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -99,20 +99,20 @@ const ContactsTable = ({
               </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
-                onClick={() => handleSort("lifecycleStage")}
+onClick={() => handleSort("lifecycle_stage_c")}
               >
                 <div className="flex items-center space-x-1">
                   <span>Lifecycle Stage</span>
-                  <ApperIcon name={getSortIcon("lifecycleStage")} className="h-4 w-4" />
+                  <ApperIcon name={getSortIcon("lifecycle_stage_c")} className="h-4 w-4" />
                 </div>
               </th>
               <th 
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 transition-colors duration-200"
-                onClick={() => handleSort("createdAt")}
+onClick={() => handleSort("created_at_c")}
               >
                 <div className="flex items-center space-x-1">
                   <span>Created</span>
-                  <ApperIcon name={getSortIcon("createdAt")} className="h-4 w-4" />
+                  <ApperIcon name={getSortIcon("created_at_c")} className="h-4 w-4" />
                 </div>
               </th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -141,30 +141,30 @@ const ContactsTable = ({
                   <div className="flex items-center">
                     <div className="w-10 h-10 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center">
                       <span className="text-sm font-medium text-white">
-                        {contact.firstName?.[0]}{contact.lastName?.[0]}
+{contact.first_name_c?.[0]}{contact.last_name_c?.[0]}
                       </span>
                     </div>
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900">
-                        {contact.firstName} {contact.lastName}
+{contact.first_name_c} {contact.last_name_c}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {getCompanyName(contact.companyId)}
+{getCompanyName(contact.company_id_c)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {contact.email}
+{contact.email_c}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {contact.phone}
+{contact.phone_c}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <LifecycleBadge stage={contact.lifecycleStage} />
+<LifecycleBadge stage={contact.lifecycle_stage_c} />
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {format(new Date(contact.createdAt), "MMM d, yyyy")}
+{format(new Date(contact.created_at_c), "MMM d, yyyy")}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <div className="flex items-center justify-end space-x-2">

@@ -38,7 +38,7 @@ const [contacts, setContacts] = useState([]);
   });
 
   // Sorting states
-  const [sortField, setSortField] = useState("firstName");
+  const [sortField, setSortField] = useState("first_name_c");
   const [sortDirection, setSortDirection] = useState("asc");
 
   // Bulk selection states
@@ -72,27 +72,27 @@ const [contacts, setContacts] = useState([]);
   }, []);
 
   // Filter and search logic
-  useEffect(() => {
+useEffect(() => {
     let filtered = [...contacts];
 
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(contact => 
-        `${contact.firstName} ${contact.lastName}`.toLowerCase().includes(query) ||
-        contact.email.toLowerCase().includes(query) ||
-        contact.phone.includes(query)
+        `${contact.first_name_c} ${contact.last_name_c}`.toLowerCase().includes(query) ||
+        contact.email_c?.toLowerCase().includes(query) ||
+        contact.phone_c?.includes(query)
       );
     }
 
     // Apply lifecycle stage filter
     if (filters.lifecycleStage) {
-      filtered = filtered.filter(contact => contact.lifecycleStage === filters.lifecycleStage);
+      filtered = filtered.filter(contact => contact.lifecycle_stage_c === filters.lifecycleStage);
     }
 
     // Apply company filter
     if (filters.companyId) {
-      filtered = filtered.filter(contact => contact.companyId === parseInt(filters.companyId));
+      filtered = filtered.filter(contact => contact.company_id_c === parseInt(filters.companyId));
     }
 
     // Apply sorting
@@ -100,14 +100,14 @@ const [contacts, setContacts] = useState([]);
       let aValue = a[sortField];
       let bValue = b[sortField];
 
-      if (sortField === "companyId") {
-        const aCompany = companies.find(c => c.Id === a.companyId)?.name || "";
-        const bCompany = companies.find(c => c.Id === b.companyId)?.name || "";
+      if (sortField === "company_id_c") {
+        const aCompany = companies.find(c => c.Id === a.company_id_c)?.Name || "";
+        const bCompany = companies.find(c => c.Id === b.company_id_c)?.Name || "";
         aValue = aCompany.toLowerCase();
         bValue = bCompany.toLowerCase();
-      } else if (sortField === "firstName") {
-        aValue = `${a.firstName} ${a.lastName}`.toLowerCase();
-        bValue = `${b.firstName} ${b.lastName}`.toLowerCase();
+      } else if (sortField === "first_name_c") {
+        aValue = `${a.first_name_c} ${a.last_name_c}`.toLowerCase();
+        bValue = `${b.first_name_c} ${b.last_name_c}`.toLowerCase();
       } else if (typeof aValue === "string") {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
@@ -173,7 +173,7 @@ const handleSearchChange = (e) => {
     }
   };
 
-  const handleSaveContact = async (formData) => {
+const handleSaveContact = async (formData) => {
     try {
       let updatedContact;
 
@@ -244,7 +244,7 @@ const handleSearchChange = (e) => {
     }
 
     try {
-      const updatedContacts = await contactService.bulkUpdateLifecycleStage(selectedContacts, lifecycleStage);
+const updatedContacts = await contactService.bulkUpdateLifecycleStage(selectedContacts, lifecycleStage);
       setContacts(contacts.map(contact => {
         const updated = updatedContacts.find(uc => uc.Id === contact.Id);
         return updated || contact;

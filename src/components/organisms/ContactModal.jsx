@@ -20,16 +20,16 @@ const ContactModal = ({ contact, companies = [], activities = [], onClose, onEdi
 
   if (!contact) return null;
 
-  const getCompanyName = (companyId) => {
+const getCompanyName = (companyId) => {
     const company = companies.find(c => c.Id === companyId);
-    return company ? company.name : "No Company";
+    return company ? company.Name : "No Company";
   };
 
   const getCompanyDetails = (companyId) => {
     return companies.find(c => c.Id === companyId);
   };
 
-  const contactActivities = activities.filter(activity => activity.contactId === contact.Id);
+const contactActivities = activities.filter(activity => activity.contact_id_c === contact.Id);
 
   const tabs = [
     { id: "overview", name: "Overview", icon: "User" },
@@ -55,16 +55,16 @@ const ContactModal = ({ contact, companies = [], activities = [], onClose, onEdi
             <div className="flex items-center space-x-4">
               <div className="w-16 h-16 bg-gradient-to-r from-primary-400 to-secondary-400 rounded-full flex items-center justify-center">
                 <span className="text-xl font-bold text-white">
-                  {contact.firstName?.[0]}{contact.lastName?.[0]}
+{contact.first_name_c?.[0]}{contact.last_name_c?.[0]}
                 </span>
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {contact.firstName} {contact.lastName}
+{contact.first_name_c} {contact.last_name_c}
                 </h2>
                 <p className="text-gray-600">{getCompanyName(contact.companyId)}</p>
                 <div className="mt-2">
-                  <LifecycleBadge stage={contact.lifecycleStage} />
+<LifecycleBadge stage={contact.lifecycle_stage_c} />
                 </div>
               </div>
             </div>
@@ -118,26 +118,26 @@ const ContactModal = ({ contact, companies = [], activities = [], onClose, onEdi
                         <label className="block text-sm font-medium text-gray-500 mb-1">Email</label>
                         <div className="flex items-center space-x-2">
                           <ApperIcon name="Mail" className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm text-gray-900">{contact.email}</span>
+<span className="text-sm text-gray-900">{contact.email_c}</span>
                         </div>
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-500 mb-1">Phone</label>
                         <div className="flex items-center space-x-2">
                           <ApperIcon name="Phone" className="h-4 w-4 text-gray-400" />
-                          <span className="text-sm text-gray-900">{contact.phone}</span>
+<span className="text-sm text-gray-900">{contact.phone_c}</span>
                         </div>
                       </div>
                     </div>
                     <div className="space-y-3">
                       <div>
                         <label className="block text-sm font-medium text-gray-500 mb-1">Lifecycle Stage</label>
-                        <LifecycleBadge stage={contact.lifecycleStage} />
+<LifecycleBadge stage={contact.lifecycle_stage_c} />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-500 mb-1">Created</label>
                         <span className="text-sm text-gray-900">
-                          {format(new Date(contact.createdAt), "MMMM d, yyyy 'at' h:mm a")}
+{format(new Date(contact.created_at_c), "MMMM d, yyyy 'at' h:mm a")}
                         </span>
                       </div>
                     </div>
@@ -152,19 +152,19 @@ const ContactModal = ({ contact, companies = [], activities = [], onClose, onEdi
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium text-gray-500 mb-1">Company Name</label>
-                          <span className="text-sm text-gray-900">{company.name}</span>
+<span className="text-sm text-gray-900">{company.Name}</span>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-500 mb-1">Industry</label>
-                          <span className="text-sm text-gray-900">{company.industry}</span>
+                          <span className="text-sm text-gray-900">{company.industry_c}</span>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-500 mb-1">Website</label>
-                          <span className="text-sm text-gray-900">{company.website}</span>
+                          <span className="text-sm text-gray-900">{company.website_c}</span>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-500 mb-1">Employee Count</label>
-                          <span className="text-sm text-gray-900">{company.employeeCount} employees</span>
+                          <span className="text-sm text-gray-900">{company.employee_count_c} employees</span>
                         </div>
                       </div>
                     </Card>
@@ -224,13 +224,13 @@ const ContactModal = ({ contact, companies = [], activities = [], onClose, onEdi
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center justify-between mb-2">
                                     <h4 className="text-sm font-semibold text-gray-900 capitalize">
-                                      {activity.type.replace(/([A-Z])/g, ' $1').trim()}
+{activity.type_c?.replace(/([A-Z])/g, ' $1').trim()}
                                     </h4>
                                     <time className="text-xs text-gray-500 font-medium">
-                                      {format(new Date(activity.timestamp), "MMM d, yyyy 'at' h:mm a")}
+{format(new Date(activity.timestamp_c), "MMM d, yyyy 'at' h:mm a")}
                                     </time>
                                   </div>
-                                  <p className="text-sm text-gray-700 leading-relaxed">{activity.description}</p>
+<p className="text-sm text-gray-700 leading-relaxed">{activity.description_c}</p>
                                 </div>
                               </div>
                             </Card>
@@ -259,7 +259,7 @@ const ContactModal = ({ contact, companies = [], activities = [], onClose, onEdi
             {activeTab === "notes" && (
               <div>
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Notes</h3>
-                {contact.notes ? (
+{contact.notes_c ? (
                   <Card className="p-4">
                     <p className="text-sm text-gray-700 whitespace-pre-wrap">{contact.notes}</p>
                   </Card>
