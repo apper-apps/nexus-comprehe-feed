@@ -144,8 +144,9 @@ class ReactionService {
       const params = {
         records: [{
           Name_c: reactionData.Name_c || `${reactionData.reaction_type_c} reaction`,
-          comment_id_c: parseInt(reactionData.comment_id_c),
+comment_id_c: parseInt(reactionData.comment_id_c),
           user_id_c: parseInt(reactionData.user_id_c),
+          Name: reactionData.Name || reactionData.Name_c,
           reaction_type_c: reactionData.reaction_type_c
         }]
       };
@@ -192,7 +193,8 @@ class ReactionService {
     try {
       const params = {
         records: [{
-          Id: parseInt(reactionId),
+Id: parseInt(reactionId),
+          Name: reactionData.Name || reactionData.Name_c,
           Name_c: reactionData.Name_c,
           reaction_type_c: reactionData.reaction_type_c
         }]

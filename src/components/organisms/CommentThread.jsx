@@ -315,16 +315,16 @@ const ReactionButtons = ({ comment, currentUser }) => {
       }
       // If user has different reaction, update it
       else if (userReaction && userReaction.reaction_type_c !== reactionType) {
-        await reactionService.update(userReaction.Id, {
-          Name_c: `${reactionType} reaction`,
+await reactionService.update(userReaction.Id, {
+          Name: `${reactionType} reaction`,
           reaction_type_c: reactionType
         });
         toast.success('Reaction updated');
       }
       // If user has no reaction, create new one
       else {
-        await reactionService.create({
-          Name_c: `${reactionType} reaction`,
+await reactionService.create({
+          Name: `${reactionType} reaction`,
           comment_id_c: comment.Id,
           user_id_c: currentUserId,
           reaction_type_c: reactionType
