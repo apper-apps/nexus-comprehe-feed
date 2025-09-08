@@ -392,5 +392,3 @@ const ReactionButtons = ({ comment, currentUser }) => {
 };
 
 export default CommentThread;
-
-export default CommentThread;
