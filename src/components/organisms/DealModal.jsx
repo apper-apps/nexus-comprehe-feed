@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import ApperIcon from "@/components/ApperIcon";
 import Card from "@/components/atoms/Card";
 import Button from "@/components/atoms/Button";
+import CommentSystem from "@/components/organisms/CommentSystem";
 const DealModal = ({ 
   deal, 
   contact, 
@@ -56,7 +57,8 @@ const DealModal = ({
   const tabs = [
     { id: 'overview', name: 'Deal Info', icon: 'FileText' },
     { id: 'activity', name: 'Activities', icon: 'Activity' },
-    { id: 'notes', name: 'Notes', icon: 'StickyNote' }
+{ id: 'notes', name: 'Notes', icon: 'StickyNote' },
+    { id: 'comments', name: 'Comments', icon: 'MessageSquare' }
   ];
 
   const dealActivities = activities.filter(activity => activity.dealId === deal.Id);
@@ -310,7 +312,7 @@ const DealModal = ({
             </div>
           )}
 
-          {activeTab === 'notes' && (
+{activeTab === 'notes' && (
             <div>
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Notes</h3>
               {deal.notes ? (
@@ -328,6 +330,12 @@ const DealModal = ({
                   </Button>
                 </div>
               )}
+            </div>
+          )}
+
+          {activeTab === 'comments' && (
+            <div>
+              <CommentSystem dealId={deal.Id} />
             </div>
           )}
         </div>
