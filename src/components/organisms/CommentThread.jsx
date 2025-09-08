@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { format } from 'date-fns';
-import ApperIcon from '@/components/ApperIcon';
-import Button from '@/components/atoms/Button';
-import Card from '@/components/atoms/Card';
-import CommentForm from '@/components/organisms/CommentForm';
+import React, { useEffect, useState } from "react";
+import { format } from "date-fns";
+import * as reactionService from "@/services/api/reactionService";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Card from "@/components/atoms/Card";
+import Button from "@/components/atoms/Button";
+import CommentForm from "@/components/organisms/CommentForm";
 
 const CommentThread = ({
   comment,
@@ -158,22 +160,30 @@ const CommentThread = ({
         </div>
 
         {/* Comment Actions */}
-        {!editingComment && (
-          <div className="ml-10 flex items-center space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowReplyForm(!showReplyForm)}
-              className="text-primary-600 hover:text-primary-700 p-0 h-auto font-medium"
-            >
-              <ApperIcon name="Reply" size={14} className="mr-1" />
-              Reply
-            </Button>
-            {replies.length > 0 && (
-              <span className="text-sm text-gray-500">
-                {replies.length} {replies.length === 1 ? 'reply' : 'replies'}
-              </span>
-            )}
+{!editingComment && (
+          <div className="ml-10 flex items-center space-x-6">
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowReplyForm(!showReplyForm)}
+                className="text-primary-600 hover:text-primary-700 p-0 h-auto font-medium"
+              >
+                <ApperIcon name="Reply" size={14} className="mr-1" />
+                Reply
+              </Button>
+              {replies.length > 0 && (
+                <span className="text-sm text-gray-500">
+                  {replies.length} {replies.length === 1 ? 'reply' : 'replies'}
+                </span>
+              )}
+            </div>
+            
+            {/* Reaction Buttons */}
+            <ReactionButtons 
+              comment={comment} 
+              currentUser={currentUser}
+            />
           </div>
         )}
 
@@ -194,7 +204,7 @@ const CommentThread = ({
         {replies.length > 0 && (
           <div className="ml-10 space-y-3 mt-4 border-l-2 border-gray-200 pl-4">
             {replies.map((reply) => (
-              <div key={reply.Id} className="space-y-2">
+<div key={reply.Id} className="space-y-2">
                 {/* Reply Header */}
                 <div className="flex items-start justify-between">
                   <div className="flex items-center space-x-2">
@@ -257,10 +267,130 @@ const CommentThread = ({
               </div>
             ))}
           </div>
-        )}
+)}
       </div>
     </Card>
   );
 };
+
+// Reaction Buttons Component
+const ReactionButtons = ({ comment, currentUser }) => {
+  const [reactions, setReactions] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [userReaction, setUserReaction] = useState(null);
+
+  // Load reactions for this comment
+  useEffect(() => {
+    loadReactions();
+  }, [comment.Id]);
+
+  const loadReactions = async () => {
+    try {
+      const commentReactions = await reactionService.getByCommentId(comment.Id);
+      setReactions(commentReactions);
+      
+      // Find current user's reaction
+      const currentUserId = currentUser?.userId || currentUser?.Id;
+      const currentUserReaction = commentReactions.find(reaction => {
+        const reactionUserId = reaction.user_id_c?.Id || reaction.user_id_c;
+        return reactionUserId === currentUserId;
+      });
+      setUserReaction(currentUserReaction);
+    } catch (error) {
+      console.error('Error loading reactions:', error);
+    }
+  };
+
+  const handleReaction = async (reactionType) => {
+    if (loading) return;
+    
+    setLoading(true);
+    try {
+      const currentUserId = currentUser?.userId || currentUser?.Id;
+      
+      // If user already has this reaction, remove it
+      if (userReaction && userReaction.reaction_type_c === reactionType) {
+        await reactionService.delete_(userReaction.Id);
+        toast.success('Reaction removed');
+      }
+      // If user has different reaction, update it
+      else if (userReaction && userReaction.reaction_type_c !== reactionType) {
+        await reactionService.update(userReaction.Id, {
+          Name_c: `${reactionType} reaction`,
+          reaction_type_c: reactionType
+        });
+        toast.success('Reaction updated');
+      }
+      // If user has no reaction, create new one
+      else {
+        await reactionService.create({
+          Name_c: `${reactionType} reaction`,
+          comment_id_c: comment.Id,
+          user_id_c: currentUserId,
+          reaction_type_c: reactionType
+        });
+        toast.success('Reaction added');
+      }
+      
+      // Reload reactions to update UI
+      await loadReactions();
+    } catch (error) {
+      console.error('Error handling reaction:', error);
+      toast.error('Failed to update reaction');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Count reactions by type
+  const likeCount = reactions.filter(r => r.reaction_type_c === 'Like').length;
+  const dislikeCount = reactions.filter(r => r.reaction_type_c === 'Dislike').length;
+
+  return (
+    <div className="flex items-center space-x-3">
+      {/* Like Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => handleReaction('Like')}
+        disabled={loading}
+        className={`flex items-center space-x-1 p-1 h-auto ${
+          userReaction?.reaction_type_c === 'Like' 
+            ? 'text-success-600 bg-success-50' 
+            : 'text-gray-500 hover:text-success-600'
+        }`}
+      >
+        <ApperIcon 
+          name="ThumbsUp" 
+          size={14} 
+          className={userReaction?.reaction_type_c === 'Like' ? 'text-success-600' : ''} 
+        />
+        {likeCount > 0 && <span className="text-xs font-medium">{likeCount}</span>}
+      </Button>
+
+      {/* Dislike Button */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={() => handleReaction('Dislike')}
+        disabled={loading}
+        className={`flex items-center space-x-1 p-1 h-auto ${
+          userReaction?.reaction_type_c === 'Dislike' 
+            ? 'text-error-600 bg-error-50' 
+            : 'text-gray-500 hover:text-error-600'
+        }`}
+      >
+        <ApperIcon 
+          name="ThumbsDown" 
+          size={14} 
+          className={userReaction?.reaction_type_c === 'Dislike' ? 'text-error-600' : ''} 
+        />
+        {dislikeCount > 0 && <span className="text-xs font-medium">{dislikeCount}</span>}
+      </Button>
+    </div>
+  );
+};
+
+export default CommentThread;
 
 export default CommentThread;
