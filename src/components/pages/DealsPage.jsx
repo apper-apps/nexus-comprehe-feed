@@ -19,12 +19,13 @@ const [deals, setDeals] = useState([]);
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [selectedDeal, setSelectedDeal] = useState(null);
+const [selectedDeal, setSelectedDeal] = useState(null);
   const [showDealForm, setShowDealForm] = useState(false);
   const [editingDeal, setEditingDeal] = useState(null);
   const [formLoading, setFormLoading] = useState(false);
   const [showActivityForm, setShowActivityForm] = useState(false);
   const [editingActivity, setEditingActivity] = useState(null);
+
   useEffect(() => {
     loadData();
   }, []);
@@ -216,7 +217,7 @@ function handleCreateActivity(dealId = null) {
       </div>
 
 {selectedDeal && (
-        <DealModal
+<DealModal
           deal={selectedDeal}
           contact={getContactById(selectedDeal.contactId)}
           company={getCompanyById(selectedDeal.companyId)}

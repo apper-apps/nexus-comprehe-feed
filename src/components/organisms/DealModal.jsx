@@ -314,22 +314,7 @@ const DealModal = ({
 
 {activeTab === 'notes' && (
             <div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Notes</h3>
-              {deal.notes ? (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
-                    {deal.notes}
-                  </p>
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <ApperIcon name="StickyNote" className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">No notes added yet</p>
-                  <Button variant="primary" className="mt-4" onClick={onEdit}>
-                    Add Notes
-                  </Button>
-                </div>
-              )}
+              <CommentSystem dealId={deal.Id} />
             </div>
           )}
 
